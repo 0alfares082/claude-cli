@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="ar-KW" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>خلوة</title>
+<style>
+  :root {
+    --paper: #f4efe6;
+    --paper-2: #ebe4d7;
+    --paper-3: #e0d7c6;
+    --line: #d3c8b5;
+    --line-soft: #e6ded0;
+    --ink: #2b2620;
+    --ink-2: #5a5247;
+    --ink-3: #8b8172;
+    --accent: #b0613f;
+    --accent-deep: #8e4a2e;
+    --accent-soft: #ead6c8;
+    --shadow: 74 58 38;
+    --font-display: "Baghdad", "Al Bayan", "Damascus", "Noto Naskh Arabic", "Amiri", "Georgia", serif;
+    --font-body: "Geeza Pro", "Noto Sans Arabic", "Segoe UI", "Tahoma", system-ui, sans-serif;
+    --font-mono: "SF Mono", "Menlo", ui-monospace, "Consolas", monospace;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --dial: clamp(300px, 34vw, 520px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { overflow-x: clip; }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    overflow-x: clip;
+    background:
+      radial-gradient(120% 80% at 100% 0%, #f8f4ec 0%, var(--paper) 55%, #efe8dc 100%);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* laid-paper texture: cheap, static, never repaints */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(0deg, rgba(var(--shadow) / 0.035) 0 1px, transparent 1px 7px);
+    mix-blend-mode: multiply;
+    opacity: .55;
+  }
+
+  .frame {
+    position: relative;
+    width: min(100% - 48px, 1300px);
+    margin-inline: auto;
+    padding-block: 36px 40px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+
+  /* ---------- masthead ---------- */
+  .mast {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    column-gap: 24px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .brand h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .brand .mark {
+    align-self: center;
+    width: 30px;
+    height: 30px;
+    color: var(--accent);
+  }
+
+  .brand .tag {
+    margin: 0;
+    color: var(--ink-3);
+    font-size: 15px;
+  }
+
+  .badge {
+    font-size: 12.5px;
+    letter-spacing: .02em;
+    color: var(--ink-2);
+    border: 1px solid var(--line);
+    background: var(--paper-2);
+    padding: 5px 12px;
+    border-radius: 999px;
+    box-shadow: inset 0 1px 0 rgba(255 255 255 / .6);
+    white-space: nowrap;
+  }
+
+  /* ---------- stage ---------- */
+  .stage {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(48px, 7vw, 120px);
+    align-items: start;
+    padding-top: 56px;
+  }
+
+  .side { min-width: 0; }
+
+  .lede {
+    margin: 0 0 44px;
+    max-width: 30ch;
+    font-family: var(--font-display);
+    font-size: 27px;
+    line-height: 1.55;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .lede em {
+    font-style: normal;
+    color: var(--accent-deep);
+  }
+
+  .block {
+    position: relative;
+    padding-inline-start: 34px;
+    padding-block: 26px 30px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .block:last-child { padding-bottom: 8px; }
+
+  .block .num {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 30px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+    direction: ltr;
+    letter-spacing: .06em;
+  }
+
+  .block-title {
+    margin: 0 0 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: var(--ink-2);
+  }
+
+  /* tabs */
+  .tabs {
+    display: inline-flex;
+    padding: 4px;
+    gap: 4px;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: inset 0 1px 2px rgba(var(--shadow) / .10);
+  }
+
+  .tab {
+    appearance: none;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 9px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color .25s var(--ease), color .25s var(--ease), transform .18s var(--ease), box-shadow .25s var(--ease);
+  }
+
+  .tab:hover { color: var(--ink); background: rgba(255 255 255 / .35); }
+  .tab:active { transform: translateY(1px) scale(.985); }
+  .tab[aria-selected="true"] {
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--line);
+    box-shadow: 0 1px 2px rgba(var(--shadow) / .10), inset 0 1px 0 rgba(255 255 255 / .8);
+  }
+
+  .tab-hint {
+    margin: 12px 0 0;
+    color: var(--ink-3);
+    font-size: 15px;
+  }
+
+  /* intention */
+  .field { display: grid; gap: 8px; }
+
+  .field label {
+    font-family: var(--font-display);
+    font-size: 21px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .field input {
+    width: 100%;
+    min-width: 0;
+    font: inherit;
+    font-size: 17px;
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid var(--line);
+    padding: 10px 2px;
+    border-radius: 0;
+    outline: none;
+    transition: border-color .25s var(--ease), background-color .25s var(--ease);
+  }
+
+  .field input::placeholder { color: var(--ink-3); }
+  .field input:hover { border-bottom-color: var(--ink-3); }
+  .field input:focus-visible {
+    border-bottom-color: var(--accent);
+    background: linear-gradient(0deg, rgba(var(--shadow) / .04), transparent 60%);
+  }
+
+  .field .help {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--ink-3);
+  }
+
+  /* suggestion */
+  .idea {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 23px;
+    line-height: 1.6;
+    color: var(--ink);
+    max-width: 30ch;
+    text-wrap: pretty;
+    transition: opacity .3s var(--ease), transform .3s var(--ease);
+  }
+
+  .idea.is-swapping { opacity: 0; transform: translateY(4px); }
+
+  .idea-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .idea-count {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--ink-3);
+    direction: ltr;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- dial ---------- */
+  .dial-wrap {
+    min-width: 0;
+    justify-self: end;
+    padding-top: 12px;
+    display: grid;
+    justify-items: center;
+    row-gap: 28px;
+  }
+
+  .dial {
+    position: relative;
+    width: var(--dial);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 38%, #f9f5ee 0%, var(--paper-2) 62%, var(--paper-3) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255 255 255 / .9),
+      inset 0 -2px 6px rgba(var(--shadow) / .10),
+      0 18px 40px -22px rgba(var(--shadow) / .45),
+      0 2px 4px rgba(var(--shadow) / .08);
+  }
+
+  .dial svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+
+  .dial .ticks { stroke: var(--ink-3); opacity: .55; }
+  .dial .ticks .major { stroke: var(--ink-2); opacity: 1; }
+  .dial .track { stroke: var(--paper-3); }
+  .dial .arc {
+    stroke: var(--accent);
+    stroke-linecap: round;
+    transition: stroke-dashoffset .28s linear;
+  }
+  .dial .knob {
+    fill: var(--paper);
+    stroke: var(--accent);
+    stroke-width: 3;
+    transition: transform .28s linear;
+  }
+  .dial .knob-core { fill: var(--accent); transition: transform .28s linear; }
+
+  .dial-face {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    text-align: center;
+    row-gap: 6px;
+  }
+
+  .mode-label {
+    font-size: 13px;
+    letter-spacing: .04em;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+
+  .time {
+    font-family: var(--font-mono);
+    font-size: clamp(52px, 5.4vw, 78px);
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    direction: ltr;
+    unicode-bidi: isolate;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .intent-mirror {
+    margin: 8px 0 0;
+    max-width: calc(var(--dial) * .58);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    overflow-wrap: anywhere;
+  }
+
+  .intent-mirror.is-empty { color: var(--ink-3); }
+
+  /* status */
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    color: var(--ink-2);
+    min-height: 24px;
+  }
+
+  .status .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--ink-3);
+    background: transparent;
+    flex: none;
+    transition: background-color .3s var(--ease), border-color .3s var(--ease);
+  }
+
+  .dial-wrap[data-state="running"] .dot {
+    background: var(--accent);
+    border-color: var(--accent);
+    animation: breathe 2.4s var(--ease) infinite;
+  }
+  .dial-wrap[data-state="paused"] .dot { border-color: var(--accent); }
+  .dial-wrap[data-state="done"] .dot { background: var(--ink); border-color: var(--ink); }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(.72); opacity: .55; }
+  }
+
+  /* controls */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn {
+    appearance: none;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 12px;
+    padding: 12px 26px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(var(--shadow) / .12), inset 0 1px 0 rgba(255 255 255 / .8);
+    transition: background-color .22s var(--ease), color .22s var(--ease), transform .16s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease);
+  }
+
+  .btn:hover { background: #faf7f1; border-color: var(--ink-3); }
+  .btn:active { transform: translateY(1px) scale(.985); box-shadow: 0 0 0 rgba(0 0 0 / 0), inset 0 1px 2px rgba(var(--shadow) / .18); }
+
+  .btn-primary {
+    min-width: 132px;
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+    box-shadow: 0 6px 14px -8px rgba(var(--shadow) / .7), inset 0 1px 0 rgba(255 255 255 / .12);
+  }
+  .btn-primary:hover { background: #3a342c; border-color: #3a342c; }
+
+  .btn-ghost {
+    background: transparent;
+    box-shadow: none;
+    border-color: transparent;
+    color: var(--ink-2);
+    padding-inline: 14px;
+  }
+  .btn-ghost:hover { background: var(--paper-2); border-color: var(--line); color: var(--ink); }
+
+  .btn-small { font-size: 14px; padding: 8px 16px; border-radius: 10px; }
+
+  :is(.btn, .tab, input):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* ---------- footer ---------- */
+  .foot {
+    margin-top: 56px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 32px;
+    row-gap: 8px;
+    align-items: start;
+    font-size: 13.5px;
+    color: var(--ink-3);
+  }
+
+  .foot p { margin: 0; }
+
+  kbd {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-2);
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 1px 6px;
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  .sessions {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .sessions b {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ---------- mobile ---------- */
+  @media (max-width: 860px) {
+    :root { --dial: min(78vw, 320px); }
+    body { font-size: 16px; }
+    .frame { width: min(100% - 40px, 1300px); padding-block: 24px 28px; }
+    .mast { grid-template-columns: 1fr; row-gap: 14px; align-items: start; padding-bottom: 18px; }
+    .badge { justify-self: start; }
+    .brand h1 { font-size: 34px; }
+    .stage { grid-template-columns: minmax(0, 1fr); padding-top: 36px; row-gap: 40px; }
+    .dial-wrap { order: -1; justify-self: center; padding-top: 0; row-gap: 22px; }
+    .lede { font-size: 22px; margin-bottom: 30px; max-width: none; }
+    .block { padding-inline-start: 28px; padding-block: 22px 24px; }
+    .block .num { top: 26px; }
+    .idea { font-size: 20px; max-width: none; }
+    .time { font-size: 50px; }
+    .foot { grid-template-columns: 1fr; margin-top: 40px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <header class="mast">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M6 28V16c0-6.5 4.5-11 10-13 5.5 2 10 6.5 10 13v12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M11 28V18c0-3.4 2.2-6 5-7.4 2.8 1.4 5 4 5 7.4v10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/>
+        <circle cx="16" cy="22" r="1.6" fill="currentColor"/>
+      </svg>
+      <h1>خلوة</h1>
+      <p class="tag">مساحة هادية تفصل بين وقت البناء ووقت التعلّم.</p>
+    </div>
+    <span class="badge">تجربة تصميم</span>
+  </header>
+
+  <main class="stage">
+
+    <section class="side" aria-labelledby="side-title">
+      <h2 id="side-title" class="sr-only">اعدادات الجلسة</h2>
+      <p class="lede">خمس وعشرين دقيقة على <em>شي واحد</em>. اختار الوضع، اكتب نيتك، وشغّل الساعة. الباقي عليها.</p>
+
+      <div class="block">
+        <span class="num" aria-hidden="true">01</span>
+        <p class="block-title" id="mode-title">الوضع</p>
+        <div class="tabs" role="tablist" aria-labelledby="mode-title">
+          <button class="tab" role="tab" id="tab-build" aria-selected="true" aria-controls="panel-ideas" data-mode="build" type="button">بناء</button>
+          <button class="tab" role="tab" id="tab-learn" aria-selected="false" aria-controls="panel-ideas" data-mode="learn" tabindex="-1" type="button">تعلّم</button>
+        </div>
+        <p class="tab-hint" id="tab-hint">تسوي شي يديد او تكمّل شي واقف.</p>
+      </div>
+
+      <div class="block">
+        <span class="num" aria-hidden="true">02</span>
+        <div class="field">
+          <label for="intent">شنو ناوي تسوي بهالجلسة؟</label>
+          <input id="intent" type="text" maxlength="90" autocomplete="off" spellcheck="false" placeholder="مثلا: اخلص صفحة الدخول" aria-describedby="intent-help">
+          <p class="help" id="intent-help">سطر واحد يكفي. بس خله واضح عشان ترجع له اذا شردت.</p>
+        </div>
+      </div>
+
+      <div class="block" id="panel-ideas" role="tabpanel" aria-labelledby="tab-build" tabindex="0">
+        <span class="num" aria-hidden="true">03</span>
+        <p class="block-title">اقتراح لهالجلسة</p>
+        <p class="idea" id="idea">افتح الملف اللي وقفت عنده امس وكمّل من نفس السطر.</p>
+        <div class="idea-row">
+          <button class="btn btn-ghost btn-small" id="next-idea" type="button">اقتراح ثاني</button>
+          <span class="idea-count" id="idea-count" aria-live="polite">1 / 4</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="dial-wrap" id="dial-wrap" data-state="ready" aria-labelledby="timer-title">
+      <h2 id="timer-title" class="sr-only">مؤقت التركيز</h2>
+
+      <div class="dial" aria-hidden="true">
+        <svg viewBox="0 0 400 400">
+          <g class="ticks" id="ticks" fill="none" stroke-width="1.5" stroke-linecap="round"></g>
+          <circle class="track" cx="200" cy="200" r="158" fill="none" stroke-width="9"/>
+          <circle class="arc" id="arc" cx="200" cy="200" r="158" fill="none" stroke-width="9" transform="rotate(-90 200 200)"/>
+          <g id="knob-g">
+            <circle class="knob" id="knob" cx="200" cy="42" r="9"/>
+            <circle class="knob-core" id="knob-core" cx="200" cy="42" r="3"/>
+          </g>
+        </svg>
+        <div class="dial-face">
+          <span class="mode-label" id="mode-label">وضع البناء</span>
+          <span class="time" id="time">25:00</span>
+          <p class="intent-mirror is-empty" id="intent-mirror">بدون نية مكتوبة للحين</p>
+        </div>
+      </div>
+
+      <div class="status" role="status" aria-live="polite">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="status-text">جاهز، للحين ما بديت.</span>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-primary" id="toggle" type="button">شغّل</button>
+        <button class="btn" id="reset" type="button">صفّر</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <div>
+      <p>اختصارات: <kbd>Space</kbd> تشغّل وتوقّف، <kbd>R</kbd> تصفّر، <kbd>&larr;</kbd> <kbd>&rarr;</kbd> على التبويب تبدّل الوضع.</p>
+      <p>الوقت ينحسب من ساعة الجهاز مو من العدّاد، فما يزيد ولا ينقص لو انشغل المتصفح.</p>
+    </div>
+    <p class="sessions">جلسات مكتملة اليوم <b id="sessions">0</b></p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var TOTAL_MS = 25 * 60 * 1000;
+  var RADIUS = 158;
+  var CIRC = 2 * Math.PI * RADIUS;
+
+  var MODES = {
+    build: {
+      label: 'وضع البناء',
+      hint: 'تسوي شي يديد او تكمّل شي واقف.',
+      placeholder: 'مثلا: اخلص صفحة الدخول',
+      ideas: [
+        'افتح الملف اللي وقفت عنده امس وكمّل من نفس السطر.',
+        'سوّ نسخة شغالة اول، وخل التحسين لجلسة ثانية.',
+        'قسّم الشغلة لثلاث خطوات صغيرة وامسك اصغر وحدة فيهم.',
+        'اكتب اللي تبي يطلع في النهاية قبل ما تلمس الكود.'
+      ]
+    },
+    learn: {
+      label: 'وضع التعلّم',
+      hint: 'تقرا، تشوف، تجرّب، وتشرح لنفسك.',
+      placeholder: 'مثلا: افهم شلون يشتغل الـ event loop',
+      ideas: [
+        'اقرا فصل واحد بس، وسجّل ثلاث نقاط بكلماتك انت.',
+        'شوف الدرس بدون تسريع، واكتب سؤال واحد ما لقيت له جواب.',
+        'جرّب اللي تعلمته على مثال صغير من شغلك الحقيقي.',
+        'اشرح الفكرة لنفسك بصوت عالي كانك تعلّم واحد ثاني.'
+      ]
+    }
+  };
+
+  var STATUS = {
+    ready: 'جاهز، للحين ما بديت.',
+    running: 'شغّال، خلك على شي واحد.',
+    paused: 'واقف مؤقتا. كمّل متى ما تبي.',
+    done: 'خلصت الجلسة. قوم امشي شوي وارجع.'
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var el = {
+    wrap: $('dial-wrap'), time: $('time'), arc: $('arc'), knobG: $('knob-g'),
+    ticks: $('ticks'), status: $('status-text'), toggle: $('toggle'), reset: $('reset'),
+    tabs: Array.prototype.slice.call(document.querySelectorAll('.tab')),
+    tabHint: $('tab-hint'), modeLabel: $('mode-label'), panel: $('panel-ideas'),
+    idea: $('idea'), ideaCount: $('idea-count'), nextIdea: $('next-idea'),
+    intent: $('intent'), mirror: $('intent-mirror'), sessions: $('sessions')
+  };
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- tiny safe storage ---------- */
+  var store = {
+    get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* storage unavailable, ignore */ } }
+  };
+  var todayKey = function () {
+    var d = new Date();
+    return 'khalwa.sessions.' + d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  };
+
+  /* ---------- dial ticks ---------- */
+  (function drawTicks() {
+    var svgNS = 'http://www.w3.org/2000/svg';
+    for (var i = 0; i < 60; i++) {
+      var major = i % 5 === 0;
+      var a = (i / 60) * Math.PI * 2 - Math.PI / 2;
+      var r1 = 178, r2 = major ? 190 : 185;
+      var line = document.createElementNS(svgNS, 'line');
+      line.setAttribute('x1', (200 + r1 * Math.cos(a)).toFixed(2));
+      line.setAttribute('y1', (200 + r1 * Math.sin(a)).toFixed(2));
+      line.setAttribute('x2', (200 + r2 * Math.cos(a)).toFixed(2));
+      line.setAttribute('y2', (200 + r2 * Math.sin(a)).toFixed(2));
+      if (major) line.setAttribute('class', 'major');
+      el.ticks.appendChild(line);
+    }
+  })();
+
+  /* ---------- timer state: timestamps, not accumulated ticks ---------- */
+  var timer = { running: false, startedAt: 0, elapsedBefore: 0, done: false, interval: null };
+
+  function elapsed() {
+    return timer.elapsedBefore + (timer.running ? (performance.now() - timer.startedAt) : 0);
+  }
+
+  function remainingMs() {
+    return Math.max(0, TOTAL_MS - elapsed());
+  }
+
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+  function render() {
+    var rem = remainingMs();
+    var secs = Math.ceil(rem / 1000);
+    var text = pad(Math.floor(secs / 60)) + ':' + pad(secs % 60);
+    if (el.time.textContent !== text) {
+      el.time.textContent = text;
+      document.title = timer.running ? text + ' · خلوة' : 'خلوة';
+    }
+    var frac = rem / TOTAL_MS;                 /* 1 = full ring, 0 = empty */
+    el.arc.setAttribute('stroke-dasharray', CIRC);
+    el.arc.setAttribute('stroke-dashoffset', (CIRC * (1 - frac)).toFixed(2));
+    el.knobG.setAttribute('transform', 'rotate(' + (360 * (1 - frac)).toFixed(2) + ' 200 200)');
+  }
+
+  function setState(name) {
+    el.wrap.setAttribute('data-state', name);
+    el.status.textContent = STATUS[name];
+    var label = name === 'running' ? 'وقّف'
+              : name === 'paused'  ? 'كمّل'
+              : name === 'done'    ? 'من اليديد'
+              : 'شغّل';
+    el.toggle.textContent = label;
+    el.toggle.setAttribute('aria-label', label + ' المؤقت');
+    el.reset.disabled = (name === 'ready');
+    el.reset.style.opacity = (name === 'ready') ? '.55' : '';
+  }
+
+  function startInterval() {
+    stopInterval();
+    timer.interval = window.setInterval(tick, 200);
+  }
+  function stopInterval() {
+    if (timer.interval) { window.clearInterval(timer.interval); timer.interval = null; }
+  }
+
+  function tick() {
+    render();
+    if (remainingMs() <= 0) finish();
+  }
+
+  function start() {
+    if (timer.done) resetTimer();
+    timer.running = true;
+    timer.startedAt = performance.now();
+    setState('running');
+    render();
+    startInterval();
+  }
+
+  function pause() {
+    if (!timer.running) return;
+    timer.elapsedBefore += performance.now() - timer.startedAt;
+    timer.running = false;
+    stopInterval();
+    setState('paused');
+    render();
+  }
+
+  function finish() {
+    stopInterval();
+    timer.running = false;
+    timer.elapsedBefore = TOTAL_MS;
+    timer.done = true;
+    render();
+    setState('done');
+    bumpSessions();
+  }
+
+  function resetTimer() {
+    stopInterval();
+    timer.running = false;
+    timer.startedAt = 0;
+    timer.elapsedBefore = 0;
+    timer.done = false;
+    render();
+    setState('ready');
+  }
+
+  function toggle() {
+    if (timer.running) pause(); else start();
+  }
+
+  el.toggle.addEventListener('click', toggle);
+  el.reset.addEventListener('click', resetTimer);
+
+  /* when the tab comes back, redraw immediately from the clock */
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden && timer.running) tick();
+  });
+
+  /* ---------- sessions count (real, local, starts at zero) ---------- */
+  function readSessions() {
+    var n = parseInt(store.get(todayKey()) || '0', 10);
+    return isNaN(n) || n < 0 ? 0 : n;
+  }
+  function bumpSessions() {
+    var n = readSessions() + 1;
+    store.set(todayKey(), String(n));
+    el.sessions.textContent = String(n);
+  }
+  el.sessions.textContent = String(readSessions());
+
+  /* ---------- modes / tabs ---------- */
+  var mode = 'build';
+  var ideaIndex = 0;
+
+  function renderIdea(animate) {
+    var list = MODES[mode].ideas;
+    var apply = function () {
+      el.idea.textContent = list[ideaIndex];
+      el.ideaCount.textContent = (ideaIndex + 1) + ' / ' + list.length;
+      el.idea.classList.remove('is-swapping');
+    };
+    if (animate && !reduceMotion) {
+      el.idea.classList.add('is-swapping');
+      window.setTimeout(apply, 180);
+    } else {
+      apply();
+    }
+  }
+
+  function setMode(next, focusTab) {
+    if (!MODES[next]) return;
+    mode = next;
+    ideaIndex = 0;
+    el.tabs.forEach(function (t) {
+      var on = t.getAttribute('data-mode') === mode;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.setAttribute('tabindex', on ? '0' : '-1');
+      if (on) {
+        el.panel.setAttribute('aria-labelledby', t.id);
+        if (focusTab) t.focus();
+      }
+    });
+    el.tabHint.textContent = MODES[mode].hint;
+    el.modeLabel.textContent = MODES[mode].label;
+    el.intent.setAttribute('placeholder', MODES[mode].placeholder);
+    renderIdea(true);
+    store.set('khalwa.mode', mode);
+  }
+
+  el.tabs.forEach(function (t) {
+    t.addEventListener('click', function () { setMode(t.getAttribute('data-mode'), false); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'Home' || e.key === 'End') {
+        e.preventDefault();
+        setMode(mode === 'build' ? 'learn' : 'build', true);
+      }
+    });
+  });
+
+  el.nextIdea.addEventListener('click', function () {
+    ideaIndex = (ideaIndex + 1) % MODES[mode].ideas.length;
+    renderIdea(true);
+  });
+
+  /* ---------- intention (always rendered as text) ---------- */
+  function renderIntent() {
+    var v = el.intent.value.replace(/\s+/g, ' ').trim();
+    if (v) {
+      el.mirror.textContent = 'النية: ' + v;
+      el.mirror.classList.remove('is-empty');
+    } else {
+      el.mirror.textContent = 'بدون نية مكتوبة للحين';
+      el.mirror.classList.add('is-empty');
+    }
+  }
+  el.intent.addEventListener('input', function () {
+    renderIntent();
+    store.set('khalwa.intent', el.intent.value);
+  });
+
+  /* ---------- global shortcuts (never steal keys from typing) ---------- */
+  document.addEventListener('keydown', function (e) {
+    var tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'BUTTON' || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); toggle(); }
+    else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); resetTimer(); }
+  });
+
+  /* ---------- restore ---------- */
+  var savedMode = store.get('khalwa.mode');
+  var savedIntent = store.get('khalwa.intent');
+  if (savedIntent) el.intent.value = savedIntent.slice(0, 90);
+  renderIntent();
+  if (savedMode && MODES[savedMode]) { mode = savedMode; }
+  setMode(mode, false);
+  el.idea.classList.remove('is-swapping');
+  renderIdea(false);
+  resetTimer();
+})();
+</script>
+</body>
+</html>

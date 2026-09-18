@@ -1,0 +1,20 @@
+{
+  "name": "claude-cli",
+  "version": "0.1.0",
+  "description": "Use the official Claude Code CLI from Codex for scoped reviews and file edits.",
+  "author": {
+    "name": "Salman AlFares"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Claude CLI",
+    "shortDescription": "Delegate reviews and file edits to Claude Code.",
+    "longDescription": "A community Codex plugin using the authenticated official Claude Code CLI. Codex scopes the work, Claude reviews or edits files, and Codex verifies the result.",
+    "developerName": "Salman AlFares",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Ask Claude to review my current changes."
+  },
+  "repository": "https://github.com/0alfares082/claude-cli",
+  "license": "MIT"
+}

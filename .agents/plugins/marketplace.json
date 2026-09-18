@@ -1,0 +1,20 @@
+{
+  "name": "claude-cli",
+  "interface": {
+    "displayName": "Claude Cli"
+  },
+  "plugins": [
+    {
+      "name": "claude-cli",
+      "source": {
+        "source": "local",
+        "path": "./plugins/claude-cli"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

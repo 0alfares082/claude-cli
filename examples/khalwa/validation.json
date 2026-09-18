@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-18",
+  "cli_version": "2.1.277",
+  "requested_model": "claude-fable-5-1",
+  "observed_models": [
+    "claude-fable-5-1"
+  ],
+  "status": "completed",
+  "permission_denials": [],
+  "host_checks": {
+    "status": "PASS",
+    "checks": [
+      "Timer start, elapsed time, pause",
+      "Timer reset",
+      "Mode tabs and keyboard navigation",
+      "Suggestion rotation",
+      "Safe text rendering and intention persistence",
+      "Timer completion stops at zero and counts once",
+      "No duplicate IDs or desktop/mobile overflow",
+      "No JavaScript errors; Arabic spelling scan passed"
+    ],
+    "viewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "errors": []
+  },
+  "host_changes": "Kuwaiti wording only. Layout, CSS and JavaScript were authored by Fable. Original output preserved separately.",
+  "limits": "One observed live task, not a comparative benchmark or independent server attestation."
+}
