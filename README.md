@@ -2,19 +2,29 @@
 
 **Ask Claude Code to review or edit files without leaving Codex.**
 
-[الشرح بالعربي](README.ar.md) · [Design example](examples/khalwa/index.html) · [Validation](VALIDATION.md)
+[![Tests](https://github.com/0alfares082/claude-cli/actions/workflows/tests.yml/badge.svg)](https://github.com/0alfares082/claude-cli/actions)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)](plugins/claude-cli/scripts/bridge.py)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+[Install](#install) · [Usage](#use-it) · [Source code](plugins/claude-cli/scripts/bridge.py) · [Validation](VALIDATION.md) · [Contributing](CONTRIBUTING.md)
 
 Claude CLI is a community-built Codex plugin that calls the **official Claude Code CLI** on your machine. Codex scopes the task, Claude does the delegated work, and Codex checks the result.
 
 It is not an official Anthropic or OpenAI product. It does not embed Claude's source code or share the author's account.
 
-## See a real result
+## At a glance
 
-We asked `claude-fable-5-1` to create a standalone Arabic focus timer through this plugin. The CLI's returned `modelUsage` reported the same model. Codex then checked the rendered page and its interactions.
+| Component | Details |
+| --- | --- |
+| Claude integration | Official local Claude Code CLI, authenticated to your own account |
+| Host | Codex |
+| Implementation | Python 3.10+, standard library only |
+| Supported systems | macOS and Linux |
+| Task duration | No time limit by default |
+| Maintainer | [Salman AlFares](https://github.com/0alfares082) |
+| License | MIT |
 
-![Khalwa, an Arabic focus timer built by Fable 5.1](examples/khalwa/desktop.png)
-
-The [example folder](examples/khalwa) contains the HTML, original model output, desktop/mobile screenshots, and a sanitized validation record. Host changes were limited to Kuwaiti wording. This is one real task, not a model-quality benchmark.
+The [validation record](VALIDATION.md) documents tests and a live Fable 5.1 integration run. Historical generated artifacts are retained under `examples/`; they are not the plugin interface or a model-quality benchmark.
 
 ## Install
 
@@ -138,4 +148,14 @@ codex plugin remove claude-cli@claude-cli
 
 Created by Salman AlFares. [MIT](LICENSE).
 
-Built against the [official CLI reference](https://code.claude.com/docs/en/cli-reference) and [programmatic-use documentation](https://code.claude.com/docs/en/headless). Cross-tool inspiration: [OpenAI's Codex plugin for Claude Code](https://github.com/openai/codex-plugin-cc) and the community [Claude Code plugin for Codex](https://github.com/andiradulescu/cc-plugin-codex). This repository's runner was written locally for this project.
+Built against the [official CLI reference](https://code.claude.com/docs/en/cli-reference) and [programmatic-use documentation](https://code.claude.com/docs/en/headless).
+
+## Source and contributors
+
+- [Python runner](plugins/claude-cli/scripts/bridge.py): authentication checks, scoped delegation, cancellation, and result handling.
+- [Tests](plugins/claude-cli/tests/test_bridge.py): fake-CLI tests that consume no model quota.
+- [Skill instructions](plugins/claude-cli/skills/claude-cli/SKILL.md): the handoff contract used by Codex.
+- [Plugin manifest](plugins/claude-cli/.codex-plugin/plugin.json): plugin metadata and entry points.
+- [Contributors](https://github.com/0alfares082/claude-cli/graphs/contributors): GitHub's commit-based contributor history.
+
+Claude is the integrated coding tool, not a human maintainer. Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).

@@ -1,7 +1,7 @@
 {
   "name": "claude-cli",
   "interface": {
-    "displayName": "Claude Cli"
+    "displayName": "Claude CLI"
   },
   "plugins": [
     {
