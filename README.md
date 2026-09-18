@@ -103,7 +103,7 @@ python3 plugins/claude-cli/scripts/bridge.py run \
   --prompt-file /absolute/task.txt
 ```
 
-The prompt can also come through stdin. Optional flags: `--cli`, `--model`, `--effort`, and `--timeout` (default: 600 seconds).
+The prompt can also come through stdin. Optional flags: `--cli`, `--model`, `--effort`, and `--timeout`. Tasks have **no time limit by default**. `--timeout 0` also disables the task deadline. Only pass a positive number of seconds when the user explicitly requests a time limit. Short authentication/help probes still have their own 20-second limits; these do not limit the Claude task.
 
 The JSON reports requested and observed models separately, permission denials, usage, and the CLI exit status. `completed` means the CLI returned a successful result; it does not prove the code is correct. `verified_by_host` stays false in the runner output because host verification is a separate step.
 

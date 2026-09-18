@@ -4,7 +4,7 @@ Recorded 2026-09-18.
 
 ## Automated
 
-- Ten fake-CLI unit tests passed locally on macOS with Python 3.13.
+- Twelve fake-CLI unit tests passed locally on macOS with Python 3.13, including no default task deadline, explicit zero disabling the deadline, and rejection of negative/non-finite limits.
 - Tests cover read-only/edit tool selection, literal stdin, auth failure, required-flag checks, malformed/empty/error/nonzero results, permission denials, timeout, SIGTERM worker cleanup, status identity minimization, and missing executable.
 - Plugin manifest and skill validators passed before publication.
 - Independent source review found a SIGTERM cleanup gap in development. It was fixed, regression-tested and re-reviewed.

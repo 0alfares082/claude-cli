@@ -2,6 +2,7 @@
 """Delegate one bounded task to the official Claude Code CLI. No dependencies."""
 import argparse
 import json
+import math
 import os
 from pathlib import Path
 import shutil
@@ -133,11 +134,15 @@ def main():
     parser.add_argument('--prompt-file')
     parser.add_argument('--model')
     parser.add_argument('--effort', choices=['low', 'medium', 'high', 'xhigh', 'max'])
-    parser.add_argument('--timeout', type=float, default=600)
+    parser.add_argument('--timeout', type=float, default=None,
+                        help='Optional task time limit in seconds. Default: no time limit; 0 also disables it.')
     args = parser.parse_args()
     try:
-        if args.timeout <= 0:
-            raise BridgeError('--timeout must be positive.')
+        if args.timeout is not None:
+            if not math.isfinite(args.timeout) or args.timeout < 0:
+                raise BridgeError('--timeout must be a finite non-negative number.')
+            if args.timeout == 0:
+                args.timeout = None
         result, code = run(args)
     except (BridgeError, OSError) as exc:
         result, code = {'status': 'error', 'error': str(exc)}, 1

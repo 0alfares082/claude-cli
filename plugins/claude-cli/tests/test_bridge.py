@@ -8,6 +8,7 @@ import signal
 import time
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNNER = ROOT / 'scripts' / 'bridge.py'
@@ -121,6 +122,22 @@ sys.exit(3 if case == 'exit' else 0)
         with self.assertRaises(ProcessLookupError):
             os.kill(worker_pid,0)
         self.assertFalse((self.cwd/'finished').exists())
+
+    def test_default_and_zero_disable_task_timeout(self):
+        spec = importlib.util.spec_from_file_location('bridge_under_test', RUNNER)
+        bridge = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(bridge)
+        for flags, expected in [([], None), (['--timeout', '0'], None), (['--timeout', '30'], 30.0)]:
+            with self.subTest(flags=flags), mock.patch.object(sys, 'argv', ['bridge', 'run', '--cwd', str(self.cwd), *flags]), mock.patch.object(bridge, 'run', return_value=({}, 0)) as run, mock.patch('builtins.print'):
+                self.assertEqual(bridge.main(), 0)
+                self.assertEqual(run.call_args.args[0].timeout, expected)
+
+    def test_invalid_timeout_rejected(self):
+        for value in ['-1', 'nan', 'inf']:
+            with self.subTest(value=value):
+                code, result = self.call(extra=['--timeout', value])
+                self.assertNotEqual(code, 0)
+                self.assertIn('finite non-negative', result['error'])
 
     def test_empty_task_stops_before_run(self):
         code,result=self.call(prompt='  ')

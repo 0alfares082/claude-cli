@@ -1,6 +1,6 @@
 {
   "name": "claude-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Use the official Claude Code CLI from Codex for scoped reviews and file edits.",
   "author": {
     "name": "Salman AlFares"
